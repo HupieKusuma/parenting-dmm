@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* ================== Base ================== */
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f4f6f8;
+            color: #333;
+        }
+
+        h1, h2 {
+            margin: 0;
+        }
+
+        /* ================== App Container ================== */
+        .app {
+            padding-bottom: 80px; /* space for bottom nav */
+        }
+
+        /* ================== Header ================== */
+        .header {
+            display: flex;
+            align-items: center;
+            background: #2f80ed;
+            color: white;
+            padding: 20px;
+            gap: 20px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .header p {
+            margin-top: 6px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* ================== Cards ================== */
+        .card {
+            background: white;
+            margin: 16px;
+            padding: 16px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+
+        /* ================== Exam Scores ================== */
+        .scores li {
+            list-style: none;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .scores li:last-child {
+            border-bottom: none;
+        }
+
+        /* ================== Hafalan ================== */
+        .hafalan-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .hafalan-item:last-child {
+            border-bottom: none;
+        }
+
+        .hafalan-meta {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .lancar {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .murajaah {
+            color: #f2994a;
+            font-weight: 600;
+        }
+
+        /* ================== Bottom Navigation ================== */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: white;
+    border-top: 1px solid #ddd;
+    display: flex;
+}
+
+ .bottom-nav a {
+    flex: 1;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #555;
+    font-size: 12px;
+    gap: 4px;
+}
+
+        .bottom-nav a.active {
+            color: #2f80ed;
+            font-weight: 600;
+        }
+
+        .info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-row span {
+    color: #777;
+}
+     .logo {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    padding: 10px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    margin-bottom: 12px;
+} 
+    /* .header-text {
+
+    } */
+
+    </style>
+</head>
+
+<body>
+<div class="app">
+
+    <!-- ================= Header ================= -->
+    <div class="header">
+        <img src="{{ url_for('static', filename='logo.jpg') }}"
+         alt="School Logo"
+         class="logo">
+         <div class="header-text">
+        <h1>DMM Parenting</h1>
+        <p>Menu Utama</p>
+         </div>
+    </div>
+
+
+<div class="card">
+    <h2>{{ data.student.name }}</h2>
+
+    <div class="info-row">
+        <span>Kelas</span>
+        <strong>{{ data.student.kelas }}</strong>
+    </div>
+
+    <div class="info-row">
+        <span>Mustawa</span>
+        <strong>{{ data.student.mustawa or "-" }}</strong>
+    </div>
+
+    <div class="info-row">
+        <span>Walikelas</span>
+        <strong></strong>
+    </div>
+
+    <div class="info-row">
+        <span>Highest Hafalan</span>
+        <strong>{{ data.highest_hafalan }}</strong>
+    </div>
+</div>
+
+    <!-- ================= Latest Hafalan ================= -->
+<a href="/hafalan" style="text-decoration:none; color:inherit;">
+    <div class="card">
+        <h2>Hafalan terbaru</h2>
+
+        {% if data.hafalan %}
+            {% set h = data.hafalan[-1] %}
+            <div class="hafalan-item">
+                <div>
+                    <strong>{{ h.surah }}</strong>
+                    <div class="hafalan-meta">
+                        Ayat {{ h.ayat_from }} - {{ h.ayat_to }}
+                    </div>
+                </div>
+                <div class="{{ h.status | lower }}">
+                    {{ h.status }}
+                </div>
+            </div>
+        {% else %}
+            <p>Data hafalan tidak ditemukan</p>
+        {% endif %}
+    </div>
+</a>
+
+
+    <!-- ================= Exam Scores ================= -->
+    <div class="card">
+        <h2>Nilai Ujian</h2>
+        <ul class="scores">
+            {% for s in data.scores %}
+                <li>
+                    <span>{{ s.subject }}</span>
+                    <strong>{{ s.score }}</strong>
+                </li>
+            {% else %}
+                <li>data ujian tidak ditemukan</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% if data.student.individual_announcement %}
+<div class="card">
+    <h2>pengumuman</h2>
+    <p>{{ data.student.individual_announcement }}</p>
+</div>
+{% endif %}
+</div>
+
+
+
+<!-- ================= Bottom Navigation ================= -->
+<div class="bottom-nav">
+    <a href="/dashboard" class="active">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+    </a>
+
+    <a href="/syllabus">
+        <i class="fa-solid fa-book"></i>
+        <span>Silabus</span>
+    </a>
+
+    <a href="/hafalan">
+        <i class="fa-solid fa-quran"></i>
+        <span>Hafalan</span>
+    </a>
+
+    <a href="/logout">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>Logout</span>
+    </a>
+</div>
+
+
+
+</body>
+</html>

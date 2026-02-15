@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hafalan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, sans-serif;
+            background: #f4f6f8;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            background: #2f80ed;
+            color: white;
+            padding: 20px;
+            gap: 20px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+        .card {
+            background: white;
+            margin: 16px;
+            padding: 16px;
+            border-radius: 16px;
+        }
+        .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .item:last-child {
+            border-bottom: none;
+        }
+        .lancar { color: green; font-weight: 600; }
+        .murajaah { color: orange; font-weight: 600; }
+       /* ================== Bottom Navigation ================== */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: white;
+    border-top: 1px solid #ddd;
+    display: flex;
+}
+
+ .bottom-nav a {
+    flex: 1;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #555;
+    font-size: 12px;
+    gap: 4px;
+}
+
+        .bottom-nav a.active {
+            color: #2f80ed;
+            font-weight: 600;
+        }
+
+     .logo {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    padding: 10px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    margin-bottom: 12px;
+} 
+
+    </style>
+</head>
+
+<body>
+    <div class="header">
+                <img src="{{ url_for('static', filename='logo.jpg') }}"
+         alt="School Logo"
+         class="logo">
+         <div>
+        <h2>DMM Parenting</h2>
+        <p>Detail hafalan santri</p>
+        </div>
+    </div>
+
+    <div class="card">
+        {% for h in data.hafalan %}
+            <div class="item">
+                <div>
+                    <strong>Pekan ke-{{ h.week }} — {{ h.surah }}</strong><br>
+                    <small>Ayat {{ h.ayat_from }} - {{ h.ayat_to }}</small>
+                </div>
+                <div class="{{ h.status | lower }}">
+                    {{ h.status }}
+                </div>
+            </div>
+        {% else %}
+            <p>No hafalan data</p>
+        {% endfor %}
+<div class="bottom-nav">
+    <a href="/dashboard" >
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+    </a>
+
+    <a href="/syllabus">
+        <i class="fa-solid fa-book"></i>
+        <span>Syllabus</span>
+    </a>
+
+    <a href="/hafalan" class="active">
+        <i class="fa-solid fa-quran"></i>
+        <span>Hafalan</span>
+    </a>
+
+    <a href="/logout">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>Logout</span>
+    </a>
+</div>
+    <!-- <div style="text-align:center; margin-bottom:20px;">
+        <a href="/dashboard">← Back</a>
+    </div> -->
+</body>
+</html>

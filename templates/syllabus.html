@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Syllabus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f4f6f8;
+            color: #333;
+        }
+
+        /* ================= Header ================= */
+        .header {
+            display: flex;
+            align-items: center;
+            background: #2f80ed;
+            color: white;
+            padding: 20px;
+            gap: 20px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+             .logo {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    padding: 10px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    margin-bottom: 12px;
+} 
+        .header h1 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
+        /* ================= Card ================= */
+        .card {
+            background: white;
+            margin: 16px;
+            padding: 16px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+        }
+
+        .subject-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .subject-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* ================= Empty ================= */
+        .empty {
+            text-align: center;
+            color: #777;
+            margin-top: 40px;
+            font-size: 14px;
+        }
+
+       /* ================== Bottom Navigation ================== */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: white;
+    border-top: 1px solid #ddd;
+    display: flex;
+}
+
+ .bottom-nav a {
+    flex: 1;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #555;
+    font-size: 12px;
+    gap: 4px;
+}
+
+        .bottom-nav a.active {
+            color: #2f80ed;
+            font-weight: 600;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- ================= Header ================= -->
+    <div class="header">
+                <img src="{{ url_for('static', filename='logo.jpg') }}"
+         alt="School Logo"
+         class="logo">
+         <div>
+        <h1>DMM Parenting</h1>
+        <p>Silabus dan kurikulum</p>
+        </div>
+    </div>
+
+    <!-- ================= Content ================= -->
+
+{% if syllabus %}
+    {% for s in syllabus %}
+    <div class="card">
+        <div class="subject-title">{{ s.mapel }}</div>
+
+        <div class="subject-desc">
+            <strong>Pengajar:</strong> {{ s.pengajar }}<br>
+            <strong>Bab:</strong> {{ s.bab }}<br>
+            <strong>Tanggal:</strong> {{ s.tanggal }}<br>
+            <strong>Status:</strong>
+            <span class="{{ s.status | lower }}">
+                {{ s.status }}
+            </span>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="empty">
+        Silabus tidak tersedia untuk jenjang anda.
+    </div>
+{% endif %}
+
+
+</div>
+
+<!-- ================= Bottom Navigation ================= -->
+<div class="bottom-nav">
+    <a href="/dashboard" >
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+    </a>
+
+    <a href="/syllabus" class="active">
+        <i class="fa-solid fa-book"></i>
+        <span>Syllabus</span>
+    </a>
+
+    <a href="/hafalan" >
+        <i class="fa-solid fa-quran"></i>
+        <span>Hafalan</span>
+    </a>
+
+    <a href="/logout">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>Logout</span>
+    </a>
+</div>
+
+</body>
+</html>
